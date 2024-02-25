@@ -11,6 +11,35 @@
 #include <zcl_include.h>
 
 #define ENDPOINT_ID		1
+#define ZCL_BASIC_ATTR_DEFAULT_LENGTH	32
+#define ZCL_BASIC_ATTR_HALF_LENGTH	(ZCL_BASIC_ATTR_DEFAULT_LENGTH / 2)
+
+typedef struct {
+	u8	zcl_version;
+	u8	app_version;
+	u8	stack_version;
+	u8	hw_version;
+	u8	manufacturer[ZCL_BASIC_ATTR_DEFAULT_LENGTH];
+	u8	model_id[ZCL_BASIC_ATTR_DEFAULT_LENGTH];
+	u8	power_source;
+	u8	device_enabled;
+
+	union {
+		u8 full[ZCL_BASIC_ATTR_HALF_LENGTH];
+		struct {
+			u8 size;
+			u8 str[ZCL_BASIC_ATTR_HALF_LENGTH - 1];
+		} sub;
+	} sw_build;
+
+	union {
+		u8 full[ZCL_BASIC_ATTR_HALF_LENGTH];
+		struct {
+			u8 size;
+			u8 str[ZCL_BASIC_ATTR_HALF_LENGTH - 1];
+		} sub;
+	} date_code;
+} zcl_basicAttr_t;
 
 u8 get_number_of_clusters(void);
 zcl_specClusterInfo_t *get_cluster_list(void);
