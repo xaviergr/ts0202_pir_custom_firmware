@@ -11,8 +11,17 @@
 #include <types.h>
 #include <drivers/drv_nv.h>
 
+#include "clusters.h"
+
 static inline int flash_write_value(u8 item_id, u16 len, void *buf)
 {
+	u16 voltage = get_power_attributes()->battery_voltage;
+
+	/* Don't write to flash memory if battery voltage is too low. */
+	if(voltage < BATTERY_SAFETY_THRESHOLD) {
+		return NV_DATA_CHECK_ERROR;
+	}
+
 	return nv_flashWriteNew(1, NV_MODULE_APP, item_id, len, buf);
 }
 

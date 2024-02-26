@@ -10,6 +10,7 @@
 
 // Tuya TS0202 by _TZ3000_6ygjfyll - TLSR825x 1M Flash
 // GPIO_PA7 - SWS programming
+// GPIO_PB3 - Free ADC pin for battery voltage measurement
 // GPIO_PB4 - LED (to GND)
 // GPIO_PC0 - BUTTON (to GND)
 

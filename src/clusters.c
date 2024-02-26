@@ -22,12 +22,14 @@
 #define NUM_ELEMENTS_OF(x)	(sizeof(x) / sizeof(x[0]))
 
 #define ZCL_BASIC_ATTR_NUM	sizeof(basic_cluster_config) / sizeof(zclAttrInfo_t)
+#define ZCL_POWER_CFG_ATTR_NUM	sizeof(power_cluster_config) / sizeof(zclAttrInfo_t)
 
 static u8 cluster_revision = ZCL_ATTR_GLOBAL_CLUSTER_REVISION_DEFAULT;
 
 static u16 output_cluster_list[] = {};
 static u16 input_cluster_list[] = {
 	ZCL_CLUSTER_GEN_BASIC,
+	ZCL_CLUSTER_GEN_POWER_CFG,
 };
 
 static af_simple_descriptor_t device_descriptor = {
@@ -125,6 +127,29 @@ const zclAttrInfo_t basic_cluster_config[] =
 	},
 };
 
+static zcl_powerAttr_t power_attributes = {};
+
+static zclAttrInfo_t power_cluster_config[] = {
+	{
+		ZCL_ATTRID_BATTERY_VOLTAGE,
+		ZCL_DATA_TYPE_UINT16,
+		ACCESS_CONTROL_READ,
+		(u8 *)&power_attributes.battery_voltage
+	},
+	{
+		ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
+		ZCL_DATA_TYPE_UINT16,
+		ACCESS_CONTROL_READ,
+		(u8 *)&power_attributes.battery_percentage
+	},
+	{
+		ZCL_ATTRID_GLOBAL_CLUSTER_REVISION,
+		ZCL_DATA_TYPE_UINT16,
+		ACCESS_CONTROL_READ,
+		&cluster_revision
+	},
+};
+
 static zcl_specClusterInfo_t cluster_list[] = {
 	{
 		ZCL_CLUSTER_GEN_BASIC,
@@ -132,6 +157,14 @@ static zcl_specClusterInfo_t cluster_list[] = {
 		ZCL_BASIC_ATTR_NUM,
 		basic_cluster_config,
 		zcl_basic_register,
+		NULL,
+	},
+	{
+		ZCL_CLUSTER_GEN_POWER_CFG,
+		MANUFACTURER_CODE_NONE,
+		ZCL_POWER_CFG_ATTR_NUM,
+		power_cluster_config,
+		zcl_powerCfg_register,
 		NULL,
 	},
 };
@@ -144,6 +177,11 @@ u8 get_number_of_clusters(void)
 zcl_specClusterInfo_t *get_cluster_list(void)
 {
 	return cluster_list;
+}
+
+zcl_powerAttr_t *get_power_attributes(void)
+{
+	return &power_attributes;
 }
 
 static void zcl_handle_write_request_cmd(u16 cluster, zclWriteCmd_t *cmd)

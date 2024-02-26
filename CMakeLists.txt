@@ -237,6 +237,7 @@ add_library(src OBJECT
 	${SRC_PATH}/led.c
 	${SRC_PATH}/main.c
 	${SRC_PATH}/button.c
+	${SRC_PATH}/battery.c
 	${SRC_PATH}/clusters.c
 	${SRC_PATH}/bdb_init.c
 )

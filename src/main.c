@@ -10,6 +10,7 @@
 #include <drivers/drv_nv.h>
 
 #include "button.h"
+#include "battery.h"
 #include "clusters.h"
 #include "bdb_init.h"
 
@@ -59,7 +60,7 @@ void main_task(void)
 	check_button_status();
 
 	if(bdb_isIdle() && zb_isDeviceJoinedNwk()) {
-		/* Nothing for now. */
+		battery_report();
 	}
 
 	if(tl_stackBusy() || !zb_isTaskDone()) {
@@ -93,6 +94,7 @@ static void app_init(bool memory_retained)
 		zb_setPollRate(DEFAULT_POLL_RATE_MS);
 	} else {
 		stack_init();
+		battery_init();
 
 		ev_on_poll(EV_POLL_IDLE, main_task);
 	}
