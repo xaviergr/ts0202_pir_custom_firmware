@@ -8,6 +8,8 @@
 #include <zb_api.h>
 #include <zb_common.h>
 
+#include "led.h"
+
 #define REJOIN_FAIL_RETRY_SLEEP_DURATION (180 * 1000)
 
 static ev_timer_event_t *steer_task;
@@ -59,6 +61,7 @@ void bdb_commission(u8 status, void *arg)
 {
 	switch(status) {
 	case BDB_COMMISSION_STA_SUCCESS:
+		led_blink_start(5, 300, 300);
 		zb_setPollRate(DEFAULT_POLL_RATE_MS);
 
 		if(steer_task) {
