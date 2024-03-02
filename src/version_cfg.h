@@ -35,5 +35,10 @@
 #define STACK_VERSION			((STACK_RELEASE << 8) | STACK_BUILD)
 #define FILE_VERSION			(APP_VERSION | STACK_VERSION)
 
+#define ZCL_BASIC_MFG_NAME		{4,'T','u','y','a'}
+#define ZCL_BASIC_MODEL_ID		{6,'T','S','0','2','0','2'}
+#define ZCL_BASIC_SW_BUILD_ID		{0}
+#define ZCL_BASIC_DATE_CODE		{0}
+
 #endif
 

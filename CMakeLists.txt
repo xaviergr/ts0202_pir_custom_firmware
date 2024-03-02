@@ -235,6 +235,8 @@ target_compile_options(platform_asm PUBLIC ${GCC_FLAGS} ${ASM_FLAGS})
 # This project's sources
 add_library(src OBJECT
 	${SRC_PATH}/main.c
+	${SRC_PATH}/clusters.c
+	${SRC_PATH}/bdb_init.c
 )
 
 target_include_directories(src PUBLIC ${HDR_FILES})
