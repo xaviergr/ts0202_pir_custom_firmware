@@ -35,14 +35,17 @@
 #define STACK_VERSION			((STACK_RELEASE << 8) | STACK_BUILD)
 #define FILE_VERSION			(APP_VERSION | STACK_VERSION)
 
-#define ZCL_BASIC_MODEL_ID		{6,'T','S','0','2','0','2'}
+#define ZCL_BASIC_MODEL_ID		TS0202
 #define ZCL_BASIC_SW_BUILD_ID		APP_BUILD
 #define ZCL_BASIC_SW_DATE_CODE		__DATE__
-#define ZCL_BASIC_MFG_NAME \
-{ \
-	17, '_', 'T', 'Z', '3', '0', '0', '0', \
-	'_', '6', 'y', 'g', 'j', 'f', 'y', 'l', 'l', '!' \
-}
+
+#if BOARD_VARIANT == 1
+#define ZCL_BASIC_MFG_NAME	TZ3000_6ygjfyll
+#elif BOARD_VARIANT == 2
+#define ZCL_BASIC_MFG_NAME	TZ3040_bb6xaihh
+#else
+#define ZCL_BASIC_MFG_NAME	""
+#endif
 
 #endif
 

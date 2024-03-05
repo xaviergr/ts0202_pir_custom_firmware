@@ -74,6 +74,8 @@ is not idle (press a button or move the device while writing the attribute).
 
 ## Compiling
 
+To build the default TZ3000_6ygjfyll board variant:
+
 ```
 git clone git@github.com:xaviergr/ts0202_pir_custom_firmware.git
 cd ts0202_pir_custom_firmware
@@ -81,6 +83,13 @@ cmake -B build
 cmake --build build/
 ```
 
+For the TZ3040_bb6xaihh variant, run the following:
+```
+cmake -DBOARD_VARIANT=2 build/
+cmake --build build/
+```
+
+If omitted, BOARD_VARIANT defaults to 1.
 The output binary that can be flashed to the device is: 'build/ts0202.bin'
 
 ## Flashing

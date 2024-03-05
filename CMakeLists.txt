@@ -11,6 +11,12 @@ set(TARGET "ts0202")
 set(BIN_TARGET ${TARGET}.bin)
 set(ELF_TARGET ${TARGET}.elf)
 
+if(DEFINED BOARD_VARIANT)
+	add_definitions(-DBOARD_VARIANT=${BOARD_VARIANT})
+else()
+	add_definitions(-DBOARD_VARIANT=1)
+endif()
+
 set(SDK_PATH ${PROJECT_SOURCE_DIR}/SDK)
 set(SRC_PATH ${PROJECT_SOURCE_DIR}/src)
 set(TOOLCHAIN_PATH ${PROJECT_SOURCE_DIR}/toolchain)

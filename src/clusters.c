@@ -8,8 +8,10 @@
 #include "clusters.h"
 #include "occupancy.h"
 
-#define TOSTRING(x) STRINGIFY(x)
-#define SW_BUILD_ID_STR TOSTRING(APP_BUILD)
+#define TOSTRING(x)		STRINGIFY(x)
+#define SW_BUILD_ID_STR		TOSTRING(APP_BUILD)
+#define ZCL_BASIC_MFG_STR	TOSTRING(ZCL_BASIC_MFG_NAME)
+#define ZCL_BASIC_MODEL_STR	TOSTRING(ZCL_BASIC_MODEL_ID)
 
 #define APP_DEV_VERSION		1
 #define RESERVED		0
@@ -51,16 +53,16 @@ static af_simple_descriptor_t device_descriptor = {
 };
 
 zcl_basicAttr_t basic_attributes = {
-	.zcl_version	= ZCL_VERSION,
-	.app_version	= APP_DEV_VERSION,
-	.stack_version	= ZIGBEE_STACK_VERSION,
-	.hw_version	= HW_VERSION,
-	.manufacturer	= ZCL_BASIC_MFG_NAME,
-	.model_id	= ZCL_BASIC_MODEL_ID,
-	.sw_build.sub	= { sizeof(SW_BUILD_ID_STR), SW_BUILD_ID_STR },
-	.date_code.sub	= { sizeof(__DATE__), ZCL_BASIC_SW_DATE_CODE },
-	.power_source	= POWER_SOURCE_BATTERY,
-	.device_enabled	= TRUE,
+	.device_enabled		= TRUE,
+	.hw_version		= HW_VERSION,
+	.zcl_version		= ZCL_VERSION,
+	.app_version		= APP_DEV_VERSION,
+	.stack_version		= ZIGBEE_STACK_VERSION,
+	.power_source		= POWER_SOURCE_BATTERY,
+	.sw_build.sub		= { sizeof(SW_BUILD_ID_STR), SW_BUILD_ID_STR },
+	.date_code.sub		= { sizeof(__DATE__), ZCL_BASIC_SW_DATE_CODE },
+	.manufacturer.sub	= { sizeof(ZCL_BASIC_MFG_STR), ZCL_BASIC_MFG_STR },
+	.model_id.sub		= { sizeof(ZCL_BASIC_MODEL_STR), ZCL_BASIC_MODEL_STR },
 };
 
 const zclAttrInfo_t basic_cluster_config[] =
@@ -93,13 +95,13 @@ const zclAttrInfo_t basic_cluster_config[] =
 		ZCL_ATTRID_BASIC_MFR_NAME,
 		ZCL_DATA_TYPE_CHAR_STR,
 		ACCESS_CONTROL_READ,
-		basic_attributes.manufacturer,
+		basic_attributes.manufacturer.full,
 	},
 	{
 		ZCL_ATTRID_BASIC_MODEL_ID,
 		ZCL_DATA_TYPE_CHAR_STR,
 		ACCESS_CONTROL_READ,
-		basic_attributes.model_id,
+		basic_attributes.model_id.full,
 	},
 	{
 		ZCL_ATTRID_BASIC_POWER_SOURCE,

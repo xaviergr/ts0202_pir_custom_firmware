@@ -22,10 +22,24 @@ typedef struct {
 	u8	app_version;
 	u8	stack_version;
 	u8	hw_version;
-	u8	manufacturer[ZCL_BASIC_ATTR_DEFAULT_LENGTH];
-	u8	model_id[ZCL_BASIC_ATTR_DEFAULT_LENGTH];
 	u8	power_source;
 	u8	device_enabled;
+
+	union {
+		u8 full[ZCL_BASIC_ATTR_DEFAULT_LENGTH];
+		struct {
+			u8 size;
+			u8 str[ZCL_BASIC_ATTR_DEFAULT_LENGTH - 1];
+		} sub;
+	} manufacturer;
+
+	union {
+		u8 full[ZCL_BASIC_ATTR_DEFAULT_LENGTH];
+		struct {
+			u8 size;
+			u8 str[ZCL_BASIC_ATTR_DEFAULT_LENGTH - 1];
+		} sub;
+	} model_id;
 
 	union {
 		u8 full[ZCL_BASIC_ATTR_HALF_LENGTH];
