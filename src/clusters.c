@@ -12,6 +12,7 @@
 #define SW_BUILD_ID_STR		TOSTRING(APP_BUILD)
 #define ZCL_BASIC_MFG_STR	TOSTRING(ZCL_BASIC_MFG_NAME)
 #define ZCL_BASIC_MODEL_STR	TOSTRING(ZCL_BASIC_MODEL_ID)
+#define ZCL_BASIC_URL_STR	TOSTRING(ZCL_BASIC_PRODUCT_URL)
 
 #define APP_DEV_VERSION		1
 #define RESERVED		0
@@ -30,6 +31,8 @@
 #define ZCL_BASIC_ATTR_NUM	sizeof(basic_cluster_config) / sizeof(zclAttrInfo_t)
 #define ZCL_POWER_CFG_ATTR_NUM	sizeof(power_cluster_config) / sizeof(zclAttrInfo_t)
 #define ZCL_OCCUPANCY_ATTR_NUM	sizeof(occupancy_cluster_config) / sizeof(zclAttrInfo_t)
+
+#define ZCL_ATTRID_BASIC_URL	0xB
 
 static u8 cluster_revision = ZCL_ATTR_GLOBAL_CLUSTER_REVISION_DEFAULT;
 
@@ -62,6 +65,7 @@ zcl_basicAttr_t basic_attributes = {
 	.sw_build.sub		= { sizeof(SW_BUILD_ID_STR), SW_BUILD_ID_STR },
 	.date_code.sub		= { sizeof(__DATE__), ZCL_BASIC_SW_DATE_CODE },
 	.manufacturer.sub	= { sizeof(ZCL_BASIC_MFG_STR), ZCL_BASIC_MFG_STR },
+	.product_url.sub	= { sizeof(ZCL_BASIC_URL_STR), ZCL_BASIC_URL_STR },
 	.model_id.sub		= { sizeof(ZCL_BASIC_MODEL_STR), ZCL_BASIC_MODEL_STR },
 };
 
@@ -126,6 +130,12 @@ const zclAttrInfo_t basic_cluster_config[] =
 		ZCL_DATA_TYPE_CHAR_STR,
 		ACCESS_CONTROL_READ,
 		basic_attributes.date_code.full,
+	},
+	{
+		ZCL_ATTRID_BASIC_URL,
+		ZCL_DATA_TYPE_CHAR_STR,
+		ACCESS_CONTROL_READ,
+		basic_attributes.product_url.full,
 	},
 	{
 		ZCL_ATTRID_GLOBAL_CLUSTER_REVISION,

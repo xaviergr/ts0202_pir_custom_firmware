@@ -11,6 +11,7 @@
 #include <zcl_include.h>
 
 #define ENDPOINT_ID		1
+#define ZCL_BASIC_ATTR_URL_LENGTH	50
 #define ZCL_BASIC_ATTR_DEFAULT_LENGTH	32
 #define ZCL_BASIC_ATTR_HALF_LENGTH	(ZCL_BASIC_ATTR_DEFAULT_LENGTH / 2)
 
@@ -56,6 +57,15 @@ typedef struct {
 			u8 str[ZCL_BASIC_ATTR_HALF_LENGTH - 1];
 		} sub;
 	} date_code;
+
+	union {
+		u8 full[ZCL_BASIC_ATTR_URL_LENGTH];
+		struct {
+			u8 size;
+			u8 str[ZCL_BASIC_ATTR_URL_LENGTH - 1];
+		} sub;
+	} product_url;
+
 } zcl_basicAttr_t;
 
 typedef struct {

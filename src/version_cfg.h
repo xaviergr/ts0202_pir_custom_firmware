@@ -38,6 +38,7 @@
 #define ZCL_BASIC_MODEL_ID		TS0202
 #define ZCL_BASIC_SW_BUILD_ID		APP_BUILD
 #define ZCL_BASIC_SW_DATE_CODE		__DATE__
+#define ZCL_BASIC_PRODUCT_URL		github.com/xaviergr/ts0202_pir_custom_firmware
 
 #if BOARD_VARIANT == 1
 #define ZCL_BASIC_MFG_NAME	TZ3000_6ygjfyll
