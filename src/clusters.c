@@ -6,6 +6,7 @@
  */
 
 #include "clusters.h"
+#include "occupancy.h"
 
 #define TOSTRING(x) STRINGIFY(x)
 #define SW_BUILD_ID_STR TOSTRING(APP_BUILD)
@@ -19,10 +20,14 @@
 #define HW_VERSION		1
 #define RESERVED		0
 
+#define DEFAULT_OCCUPANCY_DELAY	5
+#define PIR_SENSORY_TYPE	0
+
 #define NUM_ELEMENTS_OF(x)	(sizeof(x) / sizeof(x[0]))
 
 #define ZCL_BASIC_ATTR_NUM	sizeof(basic_cluster_config) / sizeof(zclAttrInfo_t)
 #define ZCL_POWER_CFG_ATTR_NUM	sizeof(power_cluster_config) / sizeof(zclAttrInfo_t)
+#define ZCL_OCCUPANCY_ATTR_NUM	sizeof(occupancy_cluster_config) / sizeof(zclAttrInfo_t)
 
 static u8 cluster_revision = ZCL_ATTR_GLOBAL_CLUSTER_REVISION_DEFAULT;
 
@@ -30,6 +35,7 @@ static u16 output_cluster_list[] = {};
 static u16 input_cluster_list[] = {
 	ZCL_CLUSTER_GEN_BASIC,
 	ZCL_CLUSTER_GEN_POWER_CFG,
+	ZCL_CLUSTER_MS_OCCUPANCY_SENSING,
 };
 
 static af_simple_descriptor_t device_descriptor = {
@@ -150,6 +156,39 @@ static zclAttrInfo_t power_cluster_config[] = {
 	},
 };
 
+static zcl_occupancyAttr_t occupancy_attributes = {
+	.occupancy	= 0,
+	.sensor_type	= 0,
+	.clear_delay	= DEFAULT_OCCUPANCY_DELAY,
+};
+
+const zclAttrInfo_t occupancy_cluster_config[] = {
+	{
+		ZCL_ATTRID_OCCUPANCY,
+		ZCL_DATA_TYPE_BITMAP8,
+		ACCESS_CONTROL_READ,
+		&occupancy_attributes.occupancy,
+	},
+	{
+		ZCL_ATTRID_OCCUPANCY_SENSOR_TYPE,
+		ZCL_DATA_TYPE_ENUM8,
+		ACCESS_CONTROL_READ,
+		&occupancy_attributes.sensor_type,
+	},
+	{
+		ZCL_ATTRID_PIR_OCCU2UNOCCU_DELAY,
+		ZCL_DATA_TYPE_UINT16,
+		ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,
+		(u8*)&occupancy_attributes.clear_delay,
+	},
+	{
+		ZCL_ATTRID_GLOBAL_CLUSTER_REVISION,
+		ZCL_DATA_TYPE_UINT16,
+		ACCESS_CONTROL_READ,
+		(u8*)&zcl_attr_global_clusterRevision,
+	},
+};
+
 static zcl_specClusterInfo_t cluster_list[] = {
 	{
 		ZCL_CLUSTER_GEN_BASIC,
@@ -165,6 +204,14 @@ static zcl_specClusterInfo_t cluster_list[] = {
 		ZCL_POWER_CFG_ATTR_NUM,
 		power_cluster_config,
 		zcl_powerCfg_register,
+		NULL,
+	},
+	{
+		ZCL_CLUSTER_MS_OCCUPANCY_SENSING,
+		MANUFACTURER_CODE_NONE,
+		ZCL_OCCUPANCY_ATTR_NUM,
+		occupancy_cluster_config,
+		zcl_occupancySensing_register,
 		NULL,
 	},
 };
@@ -184,8 +231,20 @@ zcl_powerAttr_t *get_power_attributes(void)
 	return &power_attributes;
 }
 
+zcl_occupancyAttr_t *get_occupancy_attributes(void)
+{
+	return &occupancy_attributes;
+}
+
 static void zcl_handle_write_request_cmd(u16 cluster, zclWriteCmd_t *cmd)
 {
+	switch(cluster) {
+	case ZCL_CLUSTER_MS_OCCUPANCY_SENSING:
+		occupancy_handle_write_cmd(cmd);
+		break;
+	default:
+		break;
+	}
 }
 
 void zcl_process_incoming_msg(zclIncoming_t *message_handle)

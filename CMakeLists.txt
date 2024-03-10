@@ -240,6 +240,7 @@ add_library(src OBJECT
 	${SRC_PATH}/battery.c
 	${SRC_PATH}/clusters.c
 	${SRC_PATH}/bdb_init.c
+	${SRC_PATH}/occupancy.c
 )
 
 target_include_directories(src PUBLIC ${HDR_FILES})

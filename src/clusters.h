@@ -15,6 +15,7 @@
 #define ZCL_BASIC_ATTR_HALF_LENGTH	(ZCL_BASIC_ATTR_DEFAULT_LENGTH / 2)
 
 #define NV_ITEM_APP_BATTERY_LVL		(NV_ITEM_ID_MAX - 1)
+#define NV_ITEM_APP_OCCU_DELAY		(NV_ITEM_ID_MAX - 2)
 
 typedef struct {
 	u8	zcl_version;
@@ -48,8 +49,16 @@ typedef struct {
 	u16 battery_percentage;
 } zcl_powerAttr_t;
 
-u8 get_number_of_clusters(void);
+typedef struct {
+	u8  occupancy;
+	u8  sensor_type;
+	u16 clear_delay;
+} zcl_occupancyAttr_t;
+
 zcl_powerAttr_t *get_power_attributes(void);
+zcl_occupancyAttr_t *get_occupancy_attributes(void);
+
+u8 get_number_of_clusters(void);
 zcl_specClusterInfo_t *get_cluster_list(void);
 void zcl_process_incoming_msg(zclIncoming_t *message_handle);
 int zcl_send_report(u16 cluster_id, u16 attr_id, u16 type, void *buf);

@@ -13,6 +13,7 @@
 #include "battery.h"
 #include "clusters.h"
 #include "bdb_init.h"
+#include "occupancy.h"
 
 static void enter_low_power(void)
 {
@@ -27,6 +28,12 @@ static void enter_low_power(void)
 		 * It means that the device is idle and we can sleep for longer. */
 		if (next_task->period >= DEFAULT_POLL_RATE_MS) {
 			next_task->timeout = 0;
+
+			/* Don't deep sleep while processing occupancy. */
+			if(get_occupancy_attributes()->occupancy) {
+				sleep_mode = PM_SLEEP_MODE_DEEP_WITH_RETENTION;
+				wake_src |= PM_WAKEUP_SRC_TIMER;
+			}
 		} else {
 			/* Normal task. */
 			sleep_mode = PM_SLEEP_MODE_DEEP_WITH_RETENTION;
@@ -61,6 +68,7 @@ void main_task(void)
 
 	if(bdb_isIdle() && zb_isDeviceJoinedNwk()) {
 		battery_report();
+		occupancy_report();
 	}
 
 	if(tl_stackBusy() || !zb_isTaskDone()) {
@@ -95,6 +103,7 @@ static void app_init(bool memory_retained)
 	} else {
 		stack_init();
 		battery_init();
+		occupancy_init();
 
 		ev_on_poll(EV_POLL_IDLE, main_task);
 	}
